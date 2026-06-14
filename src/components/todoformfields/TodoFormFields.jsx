@@ -11,6 +11,7 @@ export const TodoFormFields = ({ showAllFields = true, todo = {} }) => {
           placeholder="Name*"
           name="name"
           autoComplete="off"
+          defaultValue={todo.name}
         />
       </div>
 
@@ -21,18 +22,19 @@ export const TodoFormFields = ({ showAllFields = true, todo = {} }) => {
           placeholder="Description"
           name="description"
           rows="3"
+          defaultValue={todo.description}
         />
       </div>
 
       <div className={styles.FormGroup}>
         <div className={styles.FormField}>
           <label htmlFor="deadline">Deadline</label>
-          <input type="date" id="deadline" name="deadline" />
+          <input type="date" id="deadline" name="deadline" defaultValue={todo.deadline} />
         </div>
 
         <div className={styles.FormField}>
           <label htmlFor="priority">Priority</label>
-            <select defaultValue="none" id="priority" name="priority">
+            <select defaultValue={todo.priority} id="priority" name="priority">
               {
                 Object.entries(PRIORITIES).map(([key, { label }]) => (
                   <option key={key} value={key}>{ label }</option>
