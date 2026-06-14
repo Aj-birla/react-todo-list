@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./TodoForm.module.css";
+import { PRIORITIES, PRIORITY_DEFAULT } from "../../constants/priorities";
 
 export const TodoForm = ({ onCreate }) => {
   const [showAllFields, setShowAllFields] = useState(false)
@@ -10,9 +11,9 @@ export const TodoForm = ({ onCreate }) => {
 
     onCreate({
       name: elements.name.value,
-      description: elements.description.value,
-      deadline: elements.deadline.value,
-      priority: elements.priority.value,
+      description: elements.description.value ?? "",
+      deadline: elements.deadline.value ?? "",
+      priority: elements.priority.value ?? PRIORITY_DEFAULT,
       completed: false,
     });
 
@@ -56,11 +57,12 @@ export const TodoForm = ({ onCreate }) => {
 
             <div className={styles.FormField}>
               <label htmlFor="priority">Priority</label>
-              <select defaultValue="none" id="priority" name="priority">
-                <option value="none">None</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <select defaultValue="none" id="priority" name="priority">
+                  {
+                    Object.entries(PRIORITIES).map(([key, { label }]) => (
+                      <option key={key} value={key}>{ label }</option>
+                    ))
+                  }
               </select>
             </div>
           </div></>}
