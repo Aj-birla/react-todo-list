@@ -12,9 +12,9 @@ export const TodoForm = ({ onCreate }) => {
 
     onCreate({
       name: elements.name.value,
-      description: elements.description.value ?? "",
-      deadline: elements.deadline.value ?? "",
-      priority: elements.priority.value ?? PRIORITY_DEFAULT,
+      description: elements.description?.value ?? "",
+      deadline: elements.deadline?.value ?? "",
+      priority: elements.priority?.value ?? PRIORITY_DEFAULT,
       completed: false,
     });
 
