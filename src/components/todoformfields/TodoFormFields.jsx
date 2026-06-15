@@ -1,7 +1,7 @@
 import { PRIORITIES, PRIORITY_DEFAULT } from "../../constants/priorities";
 import styles from "./TodoFormFields.module.css";
 
-export const TodoFormFields = ({ showAllFields = true, todo = {} }) => {
+export const TodoFormFields = ({ showAllFields = true, todo = {}, register }) => {
   return (
     <div className={styles.FormFields}>
       <div className={styles.FormField}>
@@ -9,12 +9,9 @@ export const TodoFormFields = ({ showAllFields = true, todo = {} }) => {
           type="text"
           aria-label="Name*"
           placeholder="Name*"
-          name="name"
           autoComplete="off"
           defaultValue={todo.name}
-          required
-          minLength={3}
-          maxLength={50}
+          {...register("name", {required: true, minLength: 3, maxLength: 50})}
         />
       </div>
 
@@ -23,10 +20,9 @@ export const TodoFormFields = ({ showAllFields = true, todo = {} }) => {
         <textarea
           aria-label="Description"
           placeholder="Description"
-          name="description"
           rows="3"
           defaultValue={todo.description}
-          maxLength={200}
+          {...register("description", {maxLength: 200})}
         />
       </div>
 
@@ -36,15 +32,14 @@ export const TodoFormFields = ({ showAllFields = true, todo = {} }) => {
             <input
               type="date"
               id="deadline"
-              name="deadline"
               defaultValue={todo.deadline}
-              min={new Date().toISOString().split("T")[0]}
+              {...register("deadline", !todo.id && {min: new Date().toISOString().split("T")[0]})}
             />
         </div>
 
         <div className={styles.FormField}>
           <label htmlFor="priority">Priority</label>
-            <select defaultValue={todo.priority} id="priority" name="priority">
+            <select defaultValue={todo.priority} id="priority" {...register("priority")}>
               {
                 Object.entries(PRIORITIES).map(([key, { label }]) => (
                   <option key={key} value={key}>{ label }</option>
