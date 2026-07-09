@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 
 export const TodoForm = ({ onCreate }) => {
   const [showAllFields, setShowAllFields] = useState(false)
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
       description: "",
       deadline: "",
@@ -27,7 +27,7 @@ export const TodoForm = ({ onCreate }) => {
       </h3>
 
       <form className={styles.Form} onSubmit={handleSubmit(handleCreate)}>
-        <TodoFormFields showAllFields={showAllFields} register={register} />
+        <TodoFormFields showAllFields={showAllFields} register={register} errors={errors} />
 
         <input type="submit" value="Add" />
       </form>
