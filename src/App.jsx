@@ -3,22 +3,14 @@ import styles from './App.module.css'
 import { TodoForm } from './components/todoform/TodoForm'
 import { TodoList } from './components/todolist/TodoList';
 import { TodoFilters } from './components/TodoFilters/TodoFilters';
+import { api } from "./api";
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [filters, setFilters] = useState({});
 
   const fetchTodos = () => {
-    const urlSearchParams = new URLSearchParams(filters).toString();
-    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos?${urlSearchParams}`, {
-      method: "GET",
-      headers: { "content-type": "application/json" },
-    })
-      .then(res => {
-        if (res.ok) return res.json();
-        if (res.status === 404) return [];
-      })
-      .then(setTodos);
+    api.todos.getAll(filters).then(setTodos);
   }
 
   useEffect(() => {
@@ -26,30 +18,15 @@ const App = () => {
   }, [filters]);
 
   const handleCreate = (newTodo) => {
-    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(newTodo)
-    })
-      .then(res => !!res.ok && fetchTodos())
-      // .then();
+    api.todos.create(newTodo).then(fetchTodos);
   }
 
   const handleUpdate = (id, newTodo) => {
-    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos/${id}`, {
-      method: "PUT",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(newTodo)
-    })
-      .then(res => !!res.ok && fetchTodos())
+    api.todos.update(id, newTodo).then(fetchTodos);
   }
 
   const handleDelete = (id) => {
-    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos/${id}`, {
-      method: "DELETE",
-      headers: { "content-type": "application/json" },
-    })
-      .then(res => !!res.ok && fetchTodos())
+    api.todos.delete(id).then(fetchTodos);
   }
 
   return (
