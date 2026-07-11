@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { getTodoSchema } from "../../schemas/todo";
 import { PRIORITIES, PRIORITY_DEFAULT } from "../../constants/priorities";
 import { TodoFormFields } from "../todoformfields/TodoFormFields";
 import styles from "./TodoListItem.module.css";
@@ -10,7 +12,10 @@ export function TodoListItem({ todo, onUpdate, onDelete }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: todo });
+  } = useForm({
+    resolver: yupResolver(getTodoSchema()),
+    defaultValues: todo
+  });
 
   function handleCompleted(event) {
     onUpdate(todo.id, { ...todo, completed: event.target.checked });
