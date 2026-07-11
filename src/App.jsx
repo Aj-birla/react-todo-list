@@ -1,47 +1,25 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './App.module.css'
 import { TodoForm } from './components/todoform/TodoForm'
 import { TodoList } from './components/todolist/TodoList';
 import { TodoFilters } from './components/TodoFilters/TodoFilters';
 
-const TODOS_DEFAULT = [
-  {
-    id: "1",
-    name: "Buy an Ice Cream",
-    description: "The white one with chocolate",
-    deadline: "2025-02-09",
-    priority: "low",
-    completed: false,
-  },
-  {
-    id: "2",
-    name: "Sell old MacBook Pro 2025",
-    description: "Try to sell it on OLX",
-    deadline: "2025-02-28",
-    priority: "high",
-    completed: false,
-  },
-  {
-    id: "3",
-    name: "Charge Powerbank",
-    description: "For the next travelling",
-    deadline: "2025-02-15",
-    priority: "medium",
-    completed: true,
-  },
-  {
-    id: "4",
-    name: "Test Todo onlye with a name",
-    description: "",
-    deadline: "",
-    priority: "none",
-    completed: false,
-  },
-];
-
-function App() {
-  const [todos, setTodos] = useState(TODOS_DEFAULT);
+const App = () => {
+  const [todos, setTodos] = useState([]);
   const [filters, setFilters] = useState({});
+
+  const fetchTodos = () => {
+    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos`, {
+      method: "GET",
+      headers: { "content-type": "application/json" },
+    })
+      .then(res => !!res.ok && res.json())
+      .then(setTodos);
+  }
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   const handleCreate = (newTodo) => {
     setTodos(prevTodos => [...prevTodos, { id: `${prevTodos.length + 1}`, ...newTodo }
