@@ -9,17 +9,21 @@ const App = () => {
   const [filters, setFilters] = useState({});
 
   const fetchTodos = () => {
-    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos`, {
+    const urlSearchParams = new URLSearchParams(filters).toString();
+    fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos?${urlSearchParams}`, {
       method: "GET",
       headers: { "content-type": "application/json" },
     })
-      .then(res => !!res.ok && res.json())
+      .then(res => {
+        if (res.ok) return res.json();
+        if (res.status === 404) return [];
+      })
       .then(setTodos);
   }
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [filters]);
 
   const handleCreate = (newTodo) => {
     fetch(`${import.meta.env.VITE_MOCKAPI_BASE_URL}todos`, {
@@ -48,15 +52,6 @@ const App = () => {
       .then(res => !!res.ok && fetchTodos())
   }
 
-  function filterTodos(todo) {
-    const { completed, priority } = filters;
-
-    return (
-      (completed === "" || todo.completed === completed) &&
-      (priority === "" || todo.priority === priority)
-    );
-  }
-
   return (
     <div className={styles.App}>
       <header className={styles.Header}>
@@ -66,7 +61,7 @@ const App = () => {
       <div className={styles.AppContainer}>
         <TodoForm onCreate={handleCreate} />
         <TodoFilters onFilter={setFilters} />
-        <TodoList todos={todos.filter(filterTodos)} onUpdate={handleUpdate} onDelete={handleDelete}/>
+        <TodoList todos={todos} onUpdate={handleUpdate} onDelete={handleDelete}/>
       </div>
     </div>
   )
