@@ -4,6 +4,7 @@ import { TodoList } from './components/todolist/TodoList';
 import { TodoFilters } from './components/TodoFilters/TodoFilters';
 import { useTodos } from './hooks/useTodos';
 import { Alert } from './components/alert/Alert';
+import { Loader } from './components/loader/Loader';
 
 const App = () => {
   const todos = useTodos();
@@ -15,6 +16,7 @@ const App = () => {
         <h2 className={styles.Title}>To-Do App</h2>
       </header>
       <div className={styles.AppContainer}>
+         {todos.isLoading && <Loader />}
         {!!todos.error.message && (
           <Alert onClear={todos.error.clear}>{todos.error.message}</Alert>
         )}
